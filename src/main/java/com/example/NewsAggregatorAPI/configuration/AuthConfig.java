@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class AuthConfig {
@@ -21,13 +22,13 @@ public class AuthConfig {
         httpSecurity.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                     authorizeRequests -> authorizeRequests
-                        .requestMatchers("/register","/signin","h2-console")
+                        .requestMatchers("/register","/signin","/h2-console","/test")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
                         )
-                        .formLogin(formLogin -> formLogin.loginPage("/signin") .defaultSuccessUrl("/hello",true).permitAll()
-                        );
+                        .formLogin(formLogin -> formLogin.loginPage("/signin") .defaultSuccessUrl("/hello",true).permitAll())
+                        .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 }

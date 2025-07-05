@@ -5,8 +5,10 @@ import io.jsonwebtoken.Jwts;
 import java.security.Key;
 import java.util.Date;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 public class JwtUtility {
 
@@ -20,6 +22,21 @@ public class JwtUtility {
        .claim("roles", "ROLE" + role)
        .signWith(secretKey)
        .compact();
+    }
+
+    public static boolean validateToken(String authenticationHeader) {
+        try{   
+        Claims body = Jwts.parser().setSigningKey(secretKey).build().parseSignedClaims(authenticationHeader).getPayload();
+         }catch(SignatureException exception){
+            System.err.println("I");
+         } return true;
+    }
+
+    public static Claims getClaims(String authenticationHeader) {
+        try {
+            return Jwts.parser().setSigningKey(secretkey).build().parseClaimsJws(authenticationHeader).getBody
+        } catch ( e) {
+        }
     }
     
 }

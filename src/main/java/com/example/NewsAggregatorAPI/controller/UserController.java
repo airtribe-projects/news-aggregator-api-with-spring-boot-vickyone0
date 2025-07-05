@@ -32,6 +32,11 @@ public class UserController {
         return  _authenticationservice.signinUser(username,password);
     }
 
+    @PostMapping("/test")
+    public String test(){
+        return "Test endpoint hit ";
+    }
+
     @GetMapping("/hello")
     public String hello(){
         return "hello";
